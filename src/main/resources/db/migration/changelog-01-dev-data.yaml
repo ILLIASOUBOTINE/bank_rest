@@ -1,0 +1,191 @@
+databaseChangeLog:
+  - changeSet:
+      id: dev-data-1
+      author: ilya
+      changes:
+
+        # --- roles ---
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: name
+                  value: ROLE_ADMIN
+
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
+                  name: name
+                  value: ROLE_USER
+
+        # --- users ---
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: password
+                  value: password
+              - column:
+                  name: first_name
+                  value: Ilya
+              - column:
+                  name: last_name
+                  value: Adminov
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
+                  name: username
+                  value: user1
+              - column:
+                  name: password
+                  value: password
+              - column:
+                  name: first_name
+                  value: Ivan
+              - column:
+                  name: last_name
+                  value: Ivanov
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 3
+              - column:
+                  name: username
+                  value: user2
+              - column:
+                  name: password
+                  value: password
+              - column:
+                  name: first_name
+                  value: Anna
+              - column:
+                  name: last_name
+                  value: Petrova
+
+        # --- user_role ---
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: role_id
+                  valueNumeric: 1
+
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 2
+              - column:
+                  name: role_id
+                  valueNumeric: 2
+
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 3
+              - column:
+                  name: role_id
+                  valueNumeric: 2
+
+        # --- cards ---
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: encrypted_number
+                  value: 1111222233334444
+              - column:
+                  name: last4
+                  value: 4444
+              - column:
+                  name: expiry
+                  valueDate: 2027-12-31
+              - column:
+                  name: status
+                  value: ACTIVE
+              - column:
+                  name: balance
+                  valueNumeric: 1500.50
+              - column:
+                  name: user_id
+                  valueNumeric: 2
+
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
+                  name: encrypted_number
+                  value: 5555666677778888
+              - column:
+                  name: last4
+                  value: 8888
+              - column:
+                  name: expiry
+                  valueDate: 2026-05-31
+              - column:
+                  name: status
+                  value: ACTIVE
+              - column:
+                  name: balance
+                  valueNumeric: 320.00
+              - column:
+                  name: user_id
+                  valueNumeric: 3
+
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 3
+              - column:
+                  name: encrypted_number
+                  value: 9999000011112222
+              - column:
+                  name: last4
+                  value: 2222
+              - column:
+                  name: expiry
+                  valueDate: 2028-03-31
+              - column:
+                  name: status
+                  value: BLOCKED
+              - column:
+                  name: balance
+                  valueNumeric: 0.00
+              - column:
+                  name: user_id
+                  valueNumeric: 2
