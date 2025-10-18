@@ -189,3 +189,16 @@ databaseChangeLog:
               - column:
                   name: user_id
                   valueNumeric: 2
+
+
+  # --- new changeSet to fix sequences ---
+  - changeSet:
+      id: fix-sequences
+      author: ilya
+      changes:
+        - sql:
+            dbms: postgresql
+            sql: |
+              SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
+              SELECT setval('roles_id_seq', (SELECT MAX(id) FROM roles));
+              SELECT setval('cards_id_seq', (SELECT MAX(id) FROM cards));

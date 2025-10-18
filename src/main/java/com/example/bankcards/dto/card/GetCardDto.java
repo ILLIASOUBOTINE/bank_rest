@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 public record GetCardDto(
         Long id,
-        String encryptedNumber,
+        String maskedNumber,
         LocalDate expiry,
         CardStatus status,
         BigDecimal balance,
