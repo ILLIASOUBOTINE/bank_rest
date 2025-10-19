@@ -15,9 +15,11 @@ public interface AdminUserService {
 
     Optional<User> findUserById(Long userId);
 
-    User createUser(CreateUserDto userDto, List<Role> roles);
+    User createUser(CreateUserDto userDto);
 
     void updateUser(Long userId, UpdateUserDto userDto);
 
     void deleteUser(Long userId);
+
+    void setRoles(Long userId, List<String> roleNames);
 }

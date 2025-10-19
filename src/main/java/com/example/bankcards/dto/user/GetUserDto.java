@@ -4,14 +4,15 @@ package com.example.bankcards.dto.user;
 import com.example.bankcards.entity.Role;
 import com.example.bankcards.entity.User;
 
-import java.util.List;
+
+import java.util.Set;
 
 public record GetUserDto(
         Long userId,
         String username,
         String firstName,
         String lastName,
-        List<Role> roles
+        Set<Role> roles
     )
 {
     public static GetUserDto fromEntity(User user) {

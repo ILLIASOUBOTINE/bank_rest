@@ -37,7 +37,7 @@ databaseChangeLog:
                   value: admin
               - column:
                   name: password
-                  value: password
+                  value: $2a$10$nMWIZ1JxkffiXantvzZs2OxWlvBMMi/3DC/xYX2G1Vec.tbyQ./ly
               - column:
                   name: first_name
                   value: Ilya
@@ -56,7 +56,7 @@ databaseChangeLog:
                   value: user1
               - column:
                   name: password
-                  value: password
+                  value: $2a$10$nMWIZ1JxkffiXantvzZs2OxWlvBMMi/3DC/xYX2G1Vec.tbyQ./ly
               - column:
                   name: first_name
                   value: Ivan
@@ -75,7 +75,7 @@ databaseChangeLog:
                   value: user2
               - column:
                   name: password
-                  value: password
+                  value: $2a$10$nMWIZ1JxkffiXantvzZs2OxWlvBMMi/3DC/xYX2G1Vec.tbyQ./ly
               - column:
                   name: first_name
                   value: Anna
@@ -134,6 +134,9 @@ databaseChangeLog:
                   name: status
                   value: ACTIVE
               - column:
+                  name: block_requested
+                  valueBoolean: false
+              - column:
                   name: balance
                   valueNumeric: 1500.50
               - column:
@@ -159,6 +162,9 @@ databaseChangeLog:
                   name: status
                   value: ACTIVE
               - column:
+                  name: block_requested
+                  valueBoolean: false
+              - column:
                   name: balance
                   valueNumeric: 320.00
               - column:
@@ -183,6 +189,9 @@ databaseChangeLog:
               - column:
                   name: status
                   value: BLOCKED
+              - column:
+                  name: block_requested
+                  valueBoolean: false
               - column:
                   name: balance
                   valueNumeric: 0.00

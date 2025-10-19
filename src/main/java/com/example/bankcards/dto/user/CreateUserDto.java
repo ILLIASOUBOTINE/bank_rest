@@ -3,6 +3,8 @@ package com.example.bankcards.dto.user;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 
 public record CreateUserDto(
         @NotBlank(message = "Имя пользователя не может быть пустым")
@@ -16,7 +18,9 @@ public record CreateUserDto(
         @Size(max = 50, message = "First Name не более 50 символов")
         String firstName,
         @Size(max = 50, message = "Last Name не более 50 символов")
-        String lastName
-) {
+        String lastName,
 
+
+        List<String> roleNames
+) {
 }

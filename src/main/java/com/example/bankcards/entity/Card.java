@@ -44,6 +44,9 @@ public class Card {
     @Column(name = "status")
     private CardStatus status;
 
+    @Column(name = "block_requested")
+    private Boolean blockRequested = false;
+
     @Column(name = "balance", precision = 15, scale = 2)
     private BigDecimal balance;
 

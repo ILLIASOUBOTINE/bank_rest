@@ -32,7 +32,7 @@ public class AdminCardServiceImp implements AdminCardService {
     public Page<GetCardDto> findAll(Pageable pageable) {
         Page<Card> cards = this.cardRepository.findAll(pageable);
 
-        return cards.map(this::cardToGetCardDto);
+        return cards.map(GetCardDto::mappedCard);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class AdminCardServiceImp implements AdminCardService {
     public Page<GetCardDto> findAllByUserId(Long userId, Pageable pageable) {
         Page<Card> cards = this.cardRepository.findByUserId(userId, pageable);
 
-        return cards.map(this::cardToGetCardDto);
+        return cards.map(GetCardDto::mappedCard);
     }
 
     @Override
@@ -97,14 +97,5 @@ public class AdminCardServiceImp implements AdminCardService {
        card.setStatus(status);
     }
 
-    private GetCardDto cardToGetCardDto(Card card) {
-        return new GetCardDto(
-                card.getId(),
-                card.getMaskedNumber(),
-                card.getExpiry(),
-                card.getStatus(),
-                card.getBalance(),
-                card.getUser().getId()
-        );
-    }
+
 }
