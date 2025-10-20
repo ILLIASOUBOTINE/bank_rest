@@ -11,5 +11,21 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
 
+  app:
+    image: openjdk:17
+    container_name: bankrest_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bankdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      JWT_SECRET: super_secret_key_which_should_be_long_and_random_123456789
+    depends_on:
+      - db
+
 volumes:
   db-data:

@@ -1,1 +1,535 @@
-# Здесь будет OpenAPI описание всех доступных эндпоинтов и моделей данных.
+openapi: 3.0.3
+info:
+  title: API Банковских Карт
+  version: 1.0.0
+  description: API для управления банковскими картами, пользователями и аутентификацией
+
+servers:
+  - url: http://localhost:8080/api
+
+tags:
+  - name: Auth
+    description: Аутентификация и регистрация
+  - name: Admin Cards
+    description: Управление картами (админ)
+  - name: Admin Users
+    description: Управление пользователями (админ)
+  - name: Client Cards
+    description: Управление картами пользователя
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Вход пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: JWT токен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '401':
+          description: Неверный логин или пароль
+
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Регистрация нового пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserDto'
+      responses:
+        '200':
+          description: Пользователь создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Ошибка валидации
+
+  /admin/cards:
+    get:
+      tags:
+        - Admin Cards
+      summary: Получить все карты
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: size
+          in: query
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список карт
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponseGetCardDto'
+    post:
+      tags:
+        - Admin Cards
+      summary: Создать новую карту
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCartDto'
+      responses:
+        '200':
+          description: Карта создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+
+  /admin/cards/{id}:
+    patch:
+      tags:
+        - Admin Cards
+      summary: Обновить карту
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCardDto'
+      responses:
+        '204':
+          description: Карта обновлена
+    delete:
+      tags:
+        - Admin Cards
+      summary: Удалить карту
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Карта удалена
+
+  /admin/cards/{id}/status:
+    patch:
+      tags:
+        - Admin Cards
+      summary: Изменить статус карты
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStatusCardDto'
+      responses:
+        '204':
+          description: Статус обновлен
+
+  /admin/users:
+    get:
+      tags:
+        - Admin Users
+      summary: Получить всех пользователей
+      responses:
+        '200':
+          description: Список пользователей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags:
+        - Admin Users
+      summary: Создать нового пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '200':
+          description: Пользователь создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /admin/users/{userId}:
+    get:
+      tags:
+        - Admin Users
+      summary: Получить пользователя по ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Пользователь найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Пользователь не найден
+    patch:
+      tags:
+        - Admin Users
+      summary: Обновить пользователя
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '204':
+          description: Пользователь обновлен
+    delete:
+      tags:
+        - Admin Users
+      summary: Удалить пользователя
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Пользователь удален
+
+  /admin/users/{userId}/roles:
+    patch:
+      tags:
+        - Admin Users
+      summary: Назначить роли пользователю
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        '204':
+          description: Роли обновлены
+
+  /client/cards:
+    get:
+      tags:
+        - Client Cards
+      summary: Получить карты текущего пользователя
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: size
+          in: query
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список карт пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponseGetClientCardDto'
+
+  /client/cards/{cardId}/block/request:
+    patch:
+      tags:
+        - Client Cards
+      summary: Запрос на блокировку карты
+      parameters:
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Запрос на блокировку отправлен
+
+  /client/cards/transfer:
+    patch:
+      tags:
+        - Client Cards
+      summary: Перевод между картами
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferCardDto'
+      responses:
+        '204':
+          description: Перевод выполнен
+
+  /client/cards/{cardId}/balance:
+    get:
+      tags:
+        - Client Cards
+      summary: Получить баланс карты
+      parameters:
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Текущий баланс
+          content:
+            application/json:
+              schema:
+                type: number
+                format: double
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          example: user1
+        password:
+          type: string
+          example: pass123
+      required:
+        - username
+        - password
+
+    JwtResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    RegisterUserDto:
+      type: object
+      properties:
+        username:
+          type: string
+          example: user1
+        password:
+          type: string
+          example: pass123
+        firstName:
+          type: string
+          example: Иван
+        lastName:
+          type: string
+          example: Иванов
+      required:
+        - username
+        - password
+        - firstName
+        - lastName
+
+    CreateCartDto:
+      type: object
+      properties:
+        cardNumber:
+          type: string
+          example: "1234567812345678"
+        expiry:
+          type: string
+          format: date
+          example: "2026-12-31"
+        status:
+          type: string
+          example: ACTIVE
+        balance:
+          type: number
+          format: double
+          example: 1000.50
+        userId:
+          type: integer
+          example: 1
+      required:
+        - cardNumber
+        - expiry
+        - status
+        - balance
+        - userId
+
+    UpdateCardDto:
+      type: object
+      properties:
+        expiry:
+          type: string
+          format: date
+        status:
+          type: string
+        balance:
+          type: number
+          format: double
+
+    UpdateStatusCardDto:
+      type: object
+      properties:
+        status:
+          type: string
+          example: BLOCKED
+      required:
+        - status
+
+    TransferCardDto:
+      type: object
+      properties:
+        fromCardId:
+          type: integer
+          example: 1
+        toCardId:
+          type: integer
+          example: 2
+        amount:
+          type: number
+          format: double
+          example: 500.0
+      required:
+        - fromCardId
+        - toCardId
+        - amount
+
+    GetCardDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        maskedNumber:
+          type: string
+          example: "****5678"
+        expiry:
+          type: string
+          format: date
+        status:
+          type: string
+          example: ACTIVE
+        balance:
+          type: number
+          format: double
+        userId:
+          type: integer
+
+    GetClientCardDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        maskedNumber:
+          type: string
+          example: "****5678"
+        expiry:
+          type: string
+          format: date
+        status:
+          type: string
+          example: ACTIVE
+        balance:
+          type: number
+          format: double
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+            example: USER
+
+    CreateUserDto:
+      type: object
+      properties:
+        username:
+          type: string
+          example: user1
+        password:
+          type: string
+          example: pass123
+        firstName:
+          type: string
+          example: Иван
+        lastName:
+          type: string
+          example: Иванов
+      required:
+        - username
+        - password
+        - firstName
+        - lastName
+
+    UpdateUserDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string

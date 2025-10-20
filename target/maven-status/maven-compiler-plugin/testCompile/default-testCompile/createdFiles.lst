@@ -1,0 +1,4 @@
+com/example/bankcards/controller/ClientCardRestControllerTest.class
+com/example/bankcards/controller/AdminCardRestControllerTest.class
+com/example/bankcards/service/AdminCardServiceTest.class
+com/example/bankcards/service/ClientCardServiceTest.class
